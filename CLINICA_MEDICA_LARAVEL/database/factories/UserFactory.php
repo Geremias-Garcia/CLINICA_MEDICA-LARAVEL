@@ -2,43 +2,46 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Faker\Factory as FakerFactory;
+use Faker\Provider\pt_BR\Person as FakerPerson;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
- */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
+    protected $model = User::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    public function definition()
     {
+        $faker = FakerFactory::create('pt_BR');
+        $faker->addProvider(new FakerPerson($faker));
+
+        $roleId = $this->faker->numberBetween(1, 2);
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'nome' => $faker->name(),
+            'cpf' => $faker->cpf(false),
+            'endereco' => $faker->address(),
+            'telefone' => $faker->phoneNumber(),
+            'role_id' => $roleId,
+            'email' => $faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => bcrypt('password'),
             'remember_token' => Str::random(10),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    public function configure()
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->afterCreating(function (User $user) {
+            if ($user->role_id == 1) {
+                \App\Models\Paciente::factory()->create(['user_id' => $user->id]);
+            } elseif ($user->role_id == 2) {
+                \App\Models\Medico::factory()->create(['user_id' => $user->id]);
+            }
+        });
     }
 }
