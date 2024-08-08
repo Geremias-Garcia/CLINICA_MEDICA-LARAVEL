@@ -12,7 +12,9 @@ class PacienteController extends Controller
      */
     public function index()
     {
-        //
+        //$pacientes = User::where('role_id', 1)->get(); // Considerando que `role_id` 1 é para pacientes
+        return view('Paciente/listagem');
+
     }
 
     /**

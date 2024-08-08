@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Repositories;
+
+use Exception;
+use Illuminate\Support\Facades\DB;
+
+class Repository {
+
+    protected $model;
+
+    protected function __construct(object $model) {
+        $this->model = $model;
+    }
+
+    public function selectAll(object $paginate) {
+        if($paginate->use)
+            return $this->model->paginate($paginate->rows);
+
+        return $this->model->all();
+    }
+
+}
