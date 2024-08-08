@@ -2,15 +2,15 @@
 
 namespace App\Repositories;
 
-use App\Models\Paciente;
+use App\Models\Medico;
 
-class PacienteRepository extends Repository {
+class MedicoRepository extends Repository {
 
     public function __construct() {
-        parent::__construct(new Paciente());
+        parent::__construct(new Medico());
     }
 
-    public function getAllPacientes() {
+    public function getAllMedicos() {
         return $this->selectAll((object) ["use" => true, "rows" => 10]);
     }
 }

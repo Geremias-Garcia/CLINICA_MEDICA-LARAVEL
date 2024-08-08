@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\PacienteRepository;
 use App\Models\Paciente;
 use Illuminate\Http\Request;
 
 class PacienteController extends Controller
 {
+    protected $pacienteRepository;
+
+    public function __construct(PacienteRepository $pacienteRepository)
+    {
+        $this->pacienteRepository = $pacienteRepository;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //$pacientes = User::where('role_id', 1)->get(); // Considerando que `role_id` 1 é para pacientes
-        return view('Paciente/listagem');
-
+        $data = $this->pacienteRepository->getAllPacientes();
+        return view('Paciente/read', compact('data'));
     }
 
     /**

@@ -13,4 +13,9 @@ class Paciente extends Model
     {
         return $this->hasMany(Agendamento::class, 'paciente_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

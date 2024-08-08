@@ -2,17 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\MedicoRepository;
 use App\Models\Medico;
 use Illuminate\Http\Request;
 
 class MedicoController extends Controller
 {
+    protected $medicoRepository;
+
+    public function __construct(MedicoRepository $medicoRepository)
+    {
+        $this->medicoRepository = $medicoRepository;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $data = $this->medicoRepository->getAllMedicos();
+        return view('Medico/read', compact('data'));
     }
 
     /**
