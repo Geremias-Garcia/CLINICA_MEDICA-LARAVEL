@@ -21,4 +21,14 @@ class Repository {
         return $this->model->all();
     }
 
+    public function save($obj) {
+
+        try {
+            $obj->save();
+            return true;
+        } catch(Exception $e) { dd($e); }
+
+        return false;
+    }
+
 }

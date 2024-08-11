@@ -3,12 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\PacienteRepository;
+use App\Repositories\UserRepository;
 use App\Models\Paciente;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class PacienteController extends Controller
 {
     protected $pacienteRepository;
+
+    private $rules = [
+        'nome' => 'required|min:10|max:255',
+        'cpf' => 'required|min:10|max:11|unique:users',
+        'endereco' => 'required|string|max:255',
+        'telefone' => 'required|string|max:20',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8',
+        'data_de_nascimento' => 'required|date',
+    ];
 
     public function __construct(PacienteRepository $pacienteRepository)
     {
@@ -28,7 +41,7 @@ class PacienteController extends Controller
      */
     public function create()
     {
-        //
+        return view ('Paciente/create');
     }
 
     /**
@@ -36,7 +49,26 @@ class PacienteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate($this->rules);
+
+        $objUser = new User();
+        $objUser->nome = mb_strtoupper($request->nome, 'UTF-8');
+        $objUser->cpf = $request->cpf;
+        $objUser->endereco = $request->endereco;
+        $objUser->telefone = $request->telefone;
+        $objUser->role_id = 1;
+        $objUser->email = $request->email;
+        $objUser->password = Hash::make($request->password);
+        (new UserRepository())->save($objUser);
+        $userId = $objUser->id;
+
+        $obj = new Paciente();
+        $obj->user_id = $userId;
+        $obj->data_de_nascimento = $request->data_de_nascimento;
+        $this->pacienteRepository->save($obj);
+
+        return redirect()->route('pacientes.index')->with('success', 'Paciente criado com sucesso!');
     }
 
     /**

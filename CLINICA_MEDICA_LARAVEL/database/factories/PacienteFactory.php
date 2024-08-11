@@ -13,7 +13,7 @@ class PacienteFactory extends Factory
     {
         return [
             'user_id' => \App\Models\User::factory(),
-            'data de nascimento' => $this->faker->date(),
+            'data_de_nascimento' => $this->faker->date(),
         ];
     }
 }
