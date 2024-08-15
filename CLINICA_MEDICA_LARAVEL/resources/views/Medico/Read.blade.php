@@ -4,7 +4,7 @@
     @if($data->count())
         <ul>
             @foreach($data as $medico)
-                <li>{{ $medico->user->nome }}</li> <!-- Ajuste o campo conforme o modelo 'Paciente' -->
+                <li>{{ $medico->user->nome }}</li>
             @endforeach
         </ul>
 

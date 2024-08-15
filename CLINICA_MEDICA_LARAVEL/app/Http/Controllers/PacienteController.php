@@ -84,7 +84,7 @@ class PacienteController extends Controller
      */
     public function edit(Paciente $paciente)
     {
-        //
+        return view('Paciente/edit', compact('paciente'));
     }
 
     /**
@@ -92,7 +92,21 @@ class PacienteController extends Controller
      */
     public function update(Request $request, Paciente $paciente)
     {
-        //
+        /*$request->validate($this->rules);
+
+        $paciente->user->nome = mb_strtoupper($request->nome, 'UTF-8');
+        $paciente->user->cpf = $request->cpf;
+        $paciente->user->endereco = $request->endereco;
+        $paciente->user->telefone = $request->telefone;
+        $paciente->user->email = $request->email;
+        $paciente->user->save();
+
+        $paciente->data_de_nascimento = $request->data_de_nascimento;
+        $paciente->save();
+
+        return redirect()->route('pacientes.index')->with('success', 'Paciente atualizado com sucesso!');*/
+
+        return "ok";
     }
 
     /**

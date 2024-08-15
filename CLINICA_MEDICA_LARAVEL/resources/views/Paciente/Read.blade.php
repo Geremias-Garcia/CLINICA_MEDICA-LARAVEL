@@ -4,7 +4,10 @@
     @if($data->count())
         <ul>
             @foreach($data as $paciente)
-                <li>{{ $paciente->user->nome }}</li> <!-- Ajuste o campo conforme o modelo 'Paciente' -->
+                <li>
+                    {{ $paciente->user->nome }}
+                    <a href="{{ route('pacientes.edit', $paciente->id) }}">Editar</a>
+                </li>
             @endforeach
         </ul>
 

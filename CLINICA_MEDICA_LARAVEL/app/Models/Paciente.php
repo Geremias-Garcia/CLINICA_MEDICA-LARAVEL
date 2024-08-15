@@ -11,6 +11,10 @@ class Paciente extends Model
 {
     use HasFactory;
 
+    protected $dates = [
+        'data_de_nascimento'
+    ];
+
     protected $fillable = [
         'user_id',
         'data_de_nascimento',
