@@ -8,6 +8,8 @@ use App\Models\Paciente;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class PacienteController extends Controller
 {
@@ -15,10 +17,10 @@ class PacienteController extends Controller
 
     private $rules = [
         'nome' => 'required|min:10|max:255',
-        'cpf' => 'required|min:10|max:11|unique:users',
+        'cpf' => 'required|min:11|max:11|unique:users,cpf,',
         'endereco' => 'required|string|max:255',
         'telefone' => 'required|string|max:20',
-        'email' => 'required|string|email|max:255|unique:users',
+        'email' => 'required|string|email|max:255|unique:users,email,',
         'password' => 'required|string|min:8',
         'data_de_nascimento' => 'required|date',
     ];
@@ -92,21 +94,61 @@ class PacienteController extends Controller
      */
     public function update(Request $request, Paciente $paciente)
     {
-        /*$request->validate($this->rules);
+        try {
+            $user = $paciente->user;
 
-        $paciente->user->nome = mb_strtoupper($request->nome, 'UTF-8');
-        $paciente->user->cpf = $request->cpf;
-        $paciente->user->endereco = $request->endereco;
-        $paciente->user->telefone = $request->telefone;
-        $paciente->user->email = $request->email;
-        $paciente->user->save();
+            $validator = Validator::make($request->all(), [
+                'nome' => 'required|min:10|max:255',
+                'cpf' => [
+                    'required',
+                    'min:11',
+                    'max:11',
+                    Rule::unique('users', 'cpf')->ignore($user->id),
+                ],
+                'endereco' => 'required|string|max:255',
+                'telefone' => 'required|string|max:20',
+                'email' => [
+                    'required',
+                    'string',
+                    'email',
+                    'max:255',
+                    Rule::unique('users', 'email')->ignore($user->id),
+                ],
+                'data_de_nascimento' => 'required|date',
+            ], [
+                'nome.required' => 'O campo nome é obrigatório.',
+                'nome.min' => 'O nome deve ter pelo menos 10 caracteres.',
+                'cpf.required' => 'O campo CPF é obrigatório.',
+                'cpf.min' => 'O CPF deve ter 11 dígitos.',
+                'cpf.max' => 'O CPF deve ter no máximo 11 dígitos.',
+                'endereco.required' => 'O campo endereço é obrigatório.',
+                'telefone.required' => 'O campo telefone é obrigatório.',
+                'email.required' => 'O campo email é obrigatório.',
+                'email.email' => 'O campo email deve ser um endereço de email válido.',
+            ]);
 
-        $paciente->data_de_nascimento = $request->data_de_nascimento;
-        $paciente->save();
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
 
-        return redirect()->route('pacientes.index')->with('success', 'Paciente atualizado com sucesso!');*/
+            $user->nome = mb_strtoupper($request->nome, 'UTF-8');
+            $user->cpf = $request->cpf;
+            $user->endereco = $request->endereco;
+            $user->telefone = $request->telefone;
+            $user->email = $request->email;
+            if ($request->has('password') && !empty($request->password)) {
+                $user->password = Hash::make($request->password);
+            }
+            (new UserRepository())->save($user);
 
-        return "ok";
+            $paciente->data_de_nascimento = $request->data_de_nascimento;
+            $this->pacienteRepository->save($paciente);
+
+            return redirect()->route('pacientes.index')->with('success', 'Paciente atualizado com sucesso!');
+        } catch (\Exception $e) {
+            \Log::error('Erro ao atualizar paciente: '.$e->getMessage());
+            return back()->withErrors(['error' => 'Ocorreu um erro ao tentar atualizar o paciente.']);
+        }
     }
 
     /**
@@ -117,3 +159,4 @@ class PacienteController extends Controller
         //
     }
 }
+

@@ -32,7 +32,5 @@
         <input type="date" id="data_de_nascimento" name="data_de_nascimento" value ="{{ $paciente->data_de_nascimento }}" required>
     </div>
 
-    <!-- Repita os demais campos de acordo com os campos necessários -->
-
     <button type="submit">Atualizar Paciente</button>
 </form>
