@@ -7,6 +7,12 @@
                 <li>
                     {{ $paciente->user->nome }}
                     <a href="{{ route('pacientes.edit', $paciente->id) }}">Editar</a>
+
+                    <form action="{{ route('pacientes.destroy', $paciente->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Deseja mesmo excluir o paciente?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">Excluir</button>
+                    </form>
                 </li>
             @endforeach
         </ul>

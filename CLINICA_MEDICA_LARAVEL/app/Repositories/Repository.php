@@ -21,6 +21,10 @@ class Repository {
         return $this->model->all();
     }
 
+    public function findById($id) {
+        return $this->model->find($id);
+    }
+
     public function save($obj) {
 
         try {
@@ -28,6 +32,18 @@ class Repository {
             return true;
         } catch(Exception $e) { dd($e); }
 
+        return false;
+    }
+
+    public function delete($id) {
+
+        $obj = $this->findById($id);
+        if(isset($obj)) {
+            try {
+                $obj->delete();
+                return true;
+            } catch(Exception $e) { dd($e); }
+        }
         return false;
     }
 
