@@ -43,7 +43,7 @@ class PacienteController extends Controller
      */
     public function create()
     {
-        return view ('Paciente/create');
+        return view ('Paciente/Create');
     }
 
     /**
@@ -78,7 +78,7 @@ class PacienteController extends Controller
      */
     public function show(Paciente $paciente)
     {
-        //
+        return ($paciente);
     }
 
     /**
@@ -157,10 +157,9 @@ class PacienteController extends Controller
     public function destroy(Paciente $paciente)
     {
         $userId = $paciente->user->id;
-        return $this->pacienteRepository->findById($userId);
 
-        if($this->repository->delete($id))  {
-            return redirect()->route('aluno.index');;
+        if((new UserRepository())->delete($userId))  {
+            return redirect()->route('pacientes.index');
         }
 
 
