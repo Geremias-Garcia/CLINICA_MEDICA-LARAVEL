@@ -379,6 +379,15 @@
                 0 => '*',
             ),
         ),
+        'laravel/breeze' => array(
+            'pretty_version' => 'v2.1.4',
+            'version' => '2.1.4.0',
+            'reference' => 'ef237081cc9b87c858e9de8e35b523f93ac74fd3',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../laravel/breeze',
+            'aliases' => array(),
+            'dev_requirement' => true,
+        ),
         'laravel/framework' => array(
             'pretty_version' => 'v11.20.0',
             'version' => '11.20.0.0',
