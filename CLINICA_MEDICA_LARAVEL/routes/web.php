@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\AgendamentoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/home', function () {
@@ -21,3 +22,4 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::resource('pacientes', PacienteController::class);
+Route::resource('agendamentos', AgendamentoController::class);

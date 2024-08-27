@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agendamento;
+use App\Models\Medico;
+use App\Models\Especialidade;
 use Illuminate\Http\Request;
 
 class AgendamentoController extends Controller
@@ -20,7 +22,10 @@ class AgendamentoController extends Controller
      */
     public function create()
     {
-        //
+        $especialidades = Especialidade::all();
+        $medicos = Medico::with('user')->get();
+
+        return view('Agendamento/Create', compact('especialidades', 'medicos'));
     }
 
     /**
@@ -28,7 +33,7 @@ class AgendamentoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return "ok";
     }
 
     /**
