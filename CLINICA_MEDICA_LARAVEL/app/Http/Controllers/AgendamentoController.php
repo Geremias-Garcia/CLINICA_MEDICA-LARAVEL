@@ -7,14 +7,32 @@ use App\Models\Medico;
 use App\Models\Especialidade;
 use Illuminate\Http\Request;
 
+use App\Repositories\AgendamentoRepository;
+use App\Repositories\MedicoRepository;
+use App\Repositories\EspecialidadeRepository;
+
 class AgendamentoController extends Controller
 {
+    protected $agendamentoRepository;
+    protected $medicoRepository;
+    protected $especialidadeRepository;
+
+    public function __construct(
+        AgendamentoRepository $agendamentoRepository,
+        MedicoRepository $medicoRepository,
+        EspecialidadeRepository $especialidadeRepository
+    ) {
+        $this->agendamentoRepository = $agendamentoRepository;
+        $this->medicoRepository = $medicoRepository;
+        $this->especialidadeRepository = $especialidadeRepository;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $agendamentos = $this->agendamentoRepository->getAll();
+        return view('agendamento.index', compact('agendamentos'));
     }
 
     /**
@@ -22,8 +40,8 @@ class AgendamentoController extends Controller
      */
     public function create()
     {
-        $especialidades = Especialidade::all();
-        $medicos = Medico::with('user')->get();
+        $especialidades = $this->especialidadeRepository->getAllEspecialidades();
+        $medicos = $this->medicoRepository->getAllMedicos();
 
         return view('Agendamento/Create', compact('especialidades', 'medicos'));
     }

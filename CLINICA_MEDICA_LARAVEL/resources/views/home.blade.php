@@ -4,7 +4,7 @@
     <div class="container">
         <h1>Bem-vindo, {{ Auth::user()->nome }}</h1>
 
-        @if(Auth::user()->role_id == 2)
+        @can('isMedico', App\models\Role::class)
             <div>
                 <ul>
                     <li><a href="/ver-pacientes">Ver Pacientes</a></li>
@@ -15,7 +15,7 @@
             <div>
                 <ul>
                     <li><a href="/minhas-consultas">Minhas Consultas</a></li>
-                    <li><a href="/agendar-consulta">Agendar Consulta</a></li>
+                    <li><a href="{{ route('agendamentos.create') }}">Agendar Consulta</a></li>
                 </ul>
             </div>
         @else

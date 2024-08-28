@@ -23,3 +23,7 @@ require __DIR__.'/auth.php';
 
 Route::resource('pacientes', PacienteController::class);
 Route::resource('agendamentos', AgendamentoController::class);
+
+Route::get('/facade/test', function () {
+    return Permissions::test();
+});
