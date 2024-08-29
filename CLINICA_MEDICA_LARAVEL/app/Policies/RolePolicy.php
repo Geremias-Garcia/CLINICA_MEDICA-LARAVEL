@@ -13,12 +13,13 @@ class RolePolicy
 
     }
 
-    public function isPaciente() {
-        return PermissionController::isAuthorized('PACIENTE');
-    }
 
     public function isMedico() {
         return PermissionController::isAuthorized('MÉDICO');
+    }
+
+    public function isPaciente() {
+        return PermissionController::isAuthorized('PACIENTE');
     }
 
     /**
