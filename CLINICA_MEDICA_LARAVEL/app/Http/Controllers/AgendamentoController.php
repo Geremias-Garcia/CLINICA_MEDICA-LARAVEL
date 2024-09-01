@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agendamento;
 use App\Models\Medico;
+use App\Models\User;
 use App\Models\Especialidade;
 use Illuminate\Http\Request;
 
@@ -15,12 +16,9 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class AgendamentoController extends Controller
 {
     private $rules = [
-        'nome' => 'required|min:10|max:200',
-        'cpf' => 'required|min:11|max:11|unique:alunos',
-        'email' => 'required|min:8|max:200|unique:alunos',
-        'senha' => 'required|min:8|max:20',
-        'curso_id' => 'required',
-        'turma_id' => 'required',
+        'medico_id' => 'required|exists:medicos,id',
+        'data' => 'required|date|after_or_equal:today',
+        'paciente_id' => 'required|exists:pacientes,id',
     ];
 
     use AuthorizesRequests;
@@ -54,18 +52,27 @@ class AgendamentoController extends Controller
     {
         $this->authorize('agendarConsultaPermission', Agendamento::class);
 
-        $especialidades = $this->especialidadeRepository->getAllEspecialidades();
-        $medicos = $this->medicoRepository->getAllMedicos();
+        $medicos = Medico::with('user')->get(); // Filtra usuários com o papel de médico
 
-        return view('Agendamento/Create', compact('especialidades', 'medicos'));
+        return view('Agendamento/Create', compact('medicos'));
     }
+
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        return "ok";
+        $objAgendamento = new Agendamento();
+        $objAgendamento->paciente_id = auth()->user()->id;
+        $objAgendamento->medico_id = $request->medico_id;
+        $objAgendamento->data = $request->data;
+        $objAgendamento->status = "Em aberto";
+
+        (new AgendamentoRepository())->save($objAgendamento);
+
+        return redirect()->route('home')->with('success', 'Consulta agendada com sucesso!');
     }
 
     /**

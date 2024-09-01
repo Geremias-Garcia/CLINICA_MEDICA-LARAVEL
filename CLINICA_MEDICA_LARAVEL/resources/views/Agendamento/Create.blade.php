@@ -5,24 +5,13 @@
         <form action="{{ route('agendamentos.store') }}" method="POST">
             @csrf
 
-            <!-- Filtrar por especialidade -->
-            <div>
-                <label for="especialidade">Especialidade</label>
-                <select id="especialidade" onchange="filtrarMedicos()">
-                    <option value="">Todas</option>
-                    @foreach($especialidades as $especialidade)
-                        <option value="{{ $especialidade->id }}">{{ $especialidade->especialidade }}</option>
-                    @endforeach
-                </select>
-            </div>
-
             <!-- Selecionar médico -->
             <div>
                 <label for="medico_id">Médico</label>
                 <div id="medico_list" style="max-height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
                     @foreach($medicos as $medico)
-                        <div class="medico-item" data-especialidade="{{ $medico->especialidade_id }}" onclick="selecionarMedico('{{ $medico->id }}')">
-                            {{ $medico->user->nome }}
+                        <div class="medico-item" data-id="{{ $medico->id }}" onclick="selecionarMedico('{{ $medico->id }}')">
+                            {{ $medico->user->nome }} <!-- Exibindo o nome do médico -->
                         </div>
                     @endforeach
                 </div>
@@ -41,20 +30,6 @@
     </div>
 
     <script>
-        function filtrarMedicos() {
-            const especialidade = document.getElementById('especialidade').value;
-            const medicos = document.getElementsByClassName('medico-item');
-
-            for (let i = 0; i < medicos.length; i++) {
-                const medicoEspecialidade = medicos[i].getAttribute('data-especialidade');
-                if (especialidade === "" || medicoEspecialidade === especialidade) {
-                    medicos[i].style.display = "block";
-                } else {
-                    medicos[i].style.display = "none";
-                }
-            }
-        }
-
         function selecionarMedico(medicoId) {
             document.getElementById('medico_id').value = medicoId;
 

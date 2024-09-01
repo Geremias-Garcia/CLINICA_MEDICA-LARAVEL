@@ -6,6 +6,7 @@
 
         @can('isMedico', App\Models\Role::class)
             <div>
+                <br>
                 <ul>
                     <li><a href="/ver-pacientes">Ver Pacientes</a></li>
                     <li><a href="/agenda-medico">Minha Agenda</a></li>
@@ -15,7 +16,7 @@
 
         @can('isPaciente', App\Models\Role::class)
             <div>
-                <h2>Área do Paciente</h2>
+                <br>
                 <ul>
                     <li><a href="/minhas-consultas">Minhas Consultas</a></li>
                     <li><a href="{{ route('agendamentos.create') }}">Agendar Consulta</a></li>

@@ -13,4 +13,5 @@ class MedicoRepository extends Repository {
     public function getAllMedicos() {
         return $this->selectAll((object) ["use" => true, "rows" => 10]);
     }
+
 }
