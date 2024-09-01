@@ -7,6 +7,7 @@ use App\Models\Medico;
 use App\Models\User;
 use App\Models\Especialidade;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Repositories\AgendamentoRepository;
 use App\Repositories\MedicoRepository;
@@ -16,9 +17,9 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class AgendamentoController extends Controller
 {
     private $rules = [
-        'medico_id' => 'required|exists:medicos,id',
-        'data' => 'required|date|after_or_equal:today',
-        'paciente_id' => 'required|exists:pacientes,id',
+        'medico_id' => 'required',
+        'data' => 'required',
+        'paciente_id' => 'required',
     ];
 
     use AuthorizesRequests;
@@ -64,8 +65,10 @@ class AgendamentoController extends Controller
      */
     public function store(Request $request)
     {
+        $pacienteId = Auth::user()->paciente->id;
+
         $objAgendamento = new Agendamento();
-        $objAgendamento->paciente_id = auth()->user()->id;
+        $objAgendamento->paciente_id = $pacienteId;
         $objAgendamento->medico_id = $request->medico_id;
         $objAgendamento->data = $request->data;
         $objAgendamento->status = "Em aberto";
@@ -73,6 +76,20 @@ class AgendamentoController extends Controller
         (new AgendamentoRepository())->save($objAgendamento);
 
         return redirect()->route('home')->with('success', 'Consulta agendada com sucesso!');
+    }
+
+    public function agendamentosPendentes()
+    {
+        $medicoId = Auth::user()->medico->id;
+
+        // Recupera os agendamentos que estão "em aberto" para o médico logado
+        $agendamentos = Agendamento::where('medico_id', $medicoId)
+            ->where('status', 'Em aberto')
+            ->with('paciente.user') // Carrega o paciente e suas informações de usuário
+            ->get();
+
+
+        return view('Medico/AgendamentosPendentes', compact('agendamentos'));
     }
 
     /**

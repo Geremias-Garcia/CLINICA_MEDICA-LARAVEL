@@ -9,7 +9,7 @@
                 <br>
                 <ul>
                     <li><a href="/ver-pacientes">Ver Pacientes</a></li>
-                    <li><a href="/agenda-medico">Minha Agenda</a></li>
+                    <li><a href="{{ route('AgendamentosPendentes') }}">Agendamentos pendentes</a></li>
                 </ul>
             </div>
         @endcan

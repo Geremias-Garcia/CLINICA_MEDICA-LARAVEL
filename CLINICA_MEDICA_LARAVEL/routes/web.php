@@ -27,3 +27,7 @@ Route::resource('agendamentos', AgendamentoController::class);
 Route::get('/facade/test', function () {
     return Permissions::test();
 });
+
+Route::get('Medico/AgendamentosPendentes', [AgendamentoController::class, 'agendamentosPendentes'])
+    ->name('AgendamentosPendentes')
+    ->middleware(['auth']);
