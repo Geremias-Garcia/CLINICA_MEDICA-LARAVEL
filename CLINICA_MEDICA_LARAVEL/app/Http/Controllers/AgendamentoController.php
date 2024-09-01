@@ -10,9 +10,21 @@ use Illuminate\Http\Request;
 use App\Repositories\AgendamentoRepository;
 use App\Repositories\MedicoRepository;
 use App\Repositories\EspecialidadeRepository;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AgendamentoController extends Controller
 {
+    private $rules = [
+        'nome' => 'required|min:10|max:200',
+        'cpf' => 'required|min:11|max:11|unique:alunos',
+        'email' => 'required|min:8|max:200|unique:alunos',
+        'senha' => 'required|min:8|max:20',
+        'curso_id' => 'required',
+        'turma_id' => 'required',
+    ];
+
+    use AuthorizesRequests;
+
     protected $agendamentoRepository;
     protected $medicoRepository;
     protected $especialidadeRepository;
@@ -40,6 +52,8 @@ class AgendamentoController extends Controller
      */
     public function create()
     {
+        $this->authorize('agendarConsultaPermission', Agendamento::class);
+
         $especialidades = $this->especialidadeRepository->getAllEspecialidades();
         $medicos = $this->medicoRepository->getAllMedicos();
 

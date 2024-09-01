@@ -23,8 +23,23 @@ class PermissionController extends Controller
     }
 
     public static function isAuthorized($resource) {
-        $permissions = session('user_permissions');
-        return $permissions[$resource];
+        $permissions = session('user_permissions', []);
+
+        // Verifica se a chave existe no array
+        if (isset($permissions[$resource])) {
+            //dd($permissions);
+            return $permissions[$resource];
+        }
+
+        // Retorna false ou lança uma exceção se a chave não existir
+        return false;
     }
 
+/*
+    public static function isAuthorized($resource) {
+        $permissions = session('user_permissions');
+        //dd($permissions);
+        return $permissions[$resource];
+    }
+*/
 }
