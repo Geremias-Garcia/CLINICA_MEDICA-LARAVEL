@@ -11,8 +11,8 @@
                 <thead>
                     <tr>
                         <th>Paciente</th>
-                        <th>Data do Agendamento</th>
-                        <th>Status</th>
+                        <th>Data do Atendimento</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -20,7 +20,20 @@
                         <tr>
                             <td>{{ $agendamento->paciente->user->nome }}</td>
                             <td>{{ \Carbon\Carbon::parse($agendamento->data)->format('d/m/Y') }}</td>
-                            <td>{{ $agendamento->status }}</td>
+                            <td>
+                                <form action="{{ route('agendamentos.update', $agendamento->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="status" value="Aceito">
+                                    <button type="submit" class="btn btn-success">Aceitar</button>
+                                </form>
+                                <form action="{{ route('agendamentos.update', $agendamento->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="status" value="Cancelado">
+                                    <button type="submit" class="btn btn-danger">Cancelar</button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

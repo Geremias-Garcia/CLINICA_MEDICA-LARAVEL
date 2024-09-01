@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Repositories\AgendamentoRepository;
+use App\Repositories\AtendimentoRepository;
 use App\Repositories\MedicoRepository;
 use App\Repositories\EspecialidadeRepository;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -27,15 +28,18 @@ class AgendamentoController extends Controller
     protected $agendamentoRepository;
     protected $medicoRepository;
     protected $especialidadeRepository;
+    protected $atendimentoRepository;
 
     public function __construct(
         AgendamentoRepository $agendamentoRepository,
         MedicoRepository $medicoRepository,
-        EspecialidadeRepository $especialidadeRepository
+        EspecialidadeRepository $especialidadeRepository,
+        AtendimentoRepository $atendimentoRepository
     ) {
         $this->agendamentoRepository = $agendamentoRepository;
         $this->medicoRepository = $medicoRepository;
         $this->especialidadeRepository = $especialidadeRepository;
+        $this->atendimentoRepository = $atendimentoRepository;
     }
     /**
      * Display a listing of the resource.
@@ -113,7 +117,16 @@ class AgendamentoController extends Controller
      */
     public function update(Request $request, Agendamento $agendamento)
     {
-        //
+        $request->validate([
+            'status' => 'required|in:Aceito,Cancelado',
+        ]);
+
+        // Atualiza o status do agendamento
+        $agendamento->status = $request->status;
+        $agendamento->save();
+
+        // Redireciona para a rota de agendamentos pendentes com uma mensagem de sucesso
+        return redirect()->route('AgendamentosPendentes')->with('success', 'Status do agendamento atualizado com sucesso!');
     }
 
     /**
