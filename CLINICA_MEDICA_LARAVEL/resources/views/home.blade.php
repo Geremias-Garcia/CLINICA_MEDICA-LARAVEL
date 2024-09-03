@@ -8,8 +8,8 @@
             <div>
                 <br>
                 <ul>
-                    <li><a href="/ver-pacientes">Ver Pacientes</a></li>
                     <li><a href="{{ route('AgendamentosPendentes') }}">Agendamentos pendentes</a></li>
+                    <li><a href="{{ route('AtendimentosHome') }}">Proximos atendimentos</a></li>
                 </ul>
             </div>
         @endcan
@@ -18,8 +18,8 @@
             <div>
                 <br>
                 <ul>
-                    <li><a href="/minhas-consultas">Minhas Consultas</a></li>
                     <li><a href="{{ route('agendamentos.create') }}">Agendar Consulta</a></li>
+                    <li><a href="{{ route('MinhasConsultas') }}">Ver meus atendimentos</a></li>
                 </ul>
             </div>
         @endcan

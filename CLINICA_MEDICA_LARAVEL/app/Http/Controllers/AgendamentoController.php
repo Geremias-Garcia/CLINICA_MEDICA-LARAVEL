@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Repositories\AgendamentoRepository;
-use App\Repositories\AtendimentoRepository;
+//use App\Repositories\AtendimentoRepository;
 use App\Repositories\MedicoRepository;
 use App\Repositories\EspecialidadeRepository;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -28,18 +28,18 @@ class AgendamentoController extends Controller
     protected $agendamentoRepository;
     protected $medicoRepository;
     protected $especialidadeRepository;
-    protected $atendimentoRepository;
+    //protected $atendimentoRepository;
 
     public function __construct(
         AgendamentoRepository $agendamentoRepository,
         MedicoRepository $medicoRepository,
         EspecialidadeRepository $especialidadeRepository,
-        AtendimentoRepository $atendimentoRepository
+        //AtendimentoRepository $atendimentoRepository
     ) {
         $this->agendamentoRepository = $agendamentoRepository;
         $this->medicoRepository = $medicoRepository;
         $this->especialidadeRepository = $especialidadeRepository;
-        $this->atendimentoRepository = $atendimentoRepository;
+        //$this->atendimentoRepository = $atendimentoRepository;
     }
     /**
      * Display a listing of the resource.
@@ -129,6 +129,19 @@ class AgendamentoController extends Controller
         return redirect()->route('AgendamentosPendentes')->with('success', 'Status do agendamento atualizado com sucesso!');
     }
 
+    public function finalizar(Request $request, Agendamento $agendamento)
+    {
+        $request->validate([
+            'status' => 'required|Finalizado',
+        ]);
+
+        // Atualiza o status do agendamento
+        $agendamento->status = $request->status;
+        $agendamento->save();
+
+        // Redireciona para a rota de agendamentos pendentes com uma mensagem de sucesso
+        return redirect()->route('AgendamentosPendentes')->with('success', 'Status do agendamento atualizado com sucesso!');
+    }
     /**
      * Remove the specified resource from storage.
      */
