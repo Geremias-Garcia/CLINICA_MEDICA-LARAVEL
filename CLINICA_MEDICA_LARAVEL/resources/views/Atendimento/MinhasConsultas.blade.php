@@ -23,8 +23,8 @@
                             <td>{{ $atendimento->medico->user->nome }}</td> <!-- Supondo que há uma relação médico -> usuário -->
                             <td>{{ $atendimento->descricao }}</td>
                             <td>
-                                <!-- Adicione ações relevantes, como ver detalhes ou excluir atendimento -->
-                                <a href="{{ route('atendimentos.show', $atendimento->id) }}" class="btn btn-info">Ver Detalhes</a>
+                                <!-- Alterar o link para baixar o PDF -->
+                                <a href="{{ route('atendimentos.pdf', $atendimento->id) }}" class="btn btn-info">Ver Detalhes</a>
                             </td>
                         </tr>
                     @endforeach
